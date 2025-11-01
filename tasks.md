@@ -3,7 +3,7 @@
 ## Overview
 This document breaks down the PRD v1.3 into individual tasks following ATDD (Acceptance Test Driven Development) methodology. Each task includes acceptance criteria in Given-When-Then format and implementation subtasks.
 
-**Tech Stack:** TypeScript, Effect-TS
+**Tech Stack:** TypeScript, Effect-TS, Next.js (frontend)
 
 ---
 
@@ -384,12 +384,17 @@ This document breaks down the PRD v1.3 into individual tasks following ATDD (Acc
 **When** the final retry fails
 **Then** the job is marked as "Failed" and no further automatic retries occur
 
+**Given** automatic retries occur
+**When** I hover over the retry indicator in the admin panel
+**Then** I see a tooltip with retry count and human-readable messages for each automatic retry attempt
+
 ### Subtasks
 
 7.1. Create printing domain models
    - Define PrintJob type (documentId, html, status, attemptCount)
    - Define PrintConfig type (cupsHost, cupsPort, printerName)
    - Define PrintError types (Unreachable, PrinterError, etc.)
+   - Define RetryAttempt type (timestamp, attemptNumber, errorMessage, result)
 
 7.2. Research CUPS integration options
    - Evaluate Node.js CUPS libraries
@@ -408,11 +413,13 @@ This document breaks down the PRD v1.3 into individual tasks following ATDD (Acc
    - Handle CUPS-specific errors
    - Add connection health check
 
-7.5. Implement retry logic
+7.5. Implement retry logic with tracking
    - Create retryPrint() with 3 attempts
    - Add 30-second delay between retries (Effect.sleep)
+   - Track each retry attempt with timestamp and error message
+   - Store retry attempts in RetryAttempt array
+   - Return retry history along with final result
    - Log each attempt
-   - Return final error after all attempts fail
 
 7.6. Add unit tests
    - Mock CUPS responses
@@ -448,12 +455,17 @@ This document breaks down the PRD v1.3 into individual tasks following ATDD (Acc
 **When** examining the job record
 **Then** it contains: error details, step where failure occurred, timestamp
 
+**Given** a job has automatic or manual retries
+**When** examining the job record
+**Then** it contains: full retry history with timestamps, attempt numbers, and human-readable error messages
+
 ### Subtasks
 
 8.1. Create job domain models
-   - Define DispatchJob type (id, email, status, timestamps, results, errors)
+   - Define DispatchJob type (id, email, status, timestamps, results, errors, retryHistory)
    - Define JobStatus enum (Received, Processing, Printed, Failed)
    - Define JobResult type (gpsResult, mapResult, printResult)
+   - Define RetryHistoryEntry type (timestamp, attemptNumber, retryType: 'automatic' | 'manual', errorMessage, result)
 
 8.2. Create job repository interface
    - Define methods: createJob, updateJob, getJob, listJobs
@@ -466,12 +478,15 @@ This document breaks down the PRD v1.3 into individual tasks following ATDD (Acc
    - Chain all services using Effect.flatMap
    - Handle errors at each step gracefully
    - Update job status throughout workflow
+   - Capture and store retry history from print service
 
 8.4. Implement workflow error handling
    - Catch errors at each step
    - Continue to printing even if map fails (print email + error)
    - Log errors with context
    - Update job record with error details
+   - Append automatic retry attempts to retryHistory
+   - Store human-readable error messages for each retry
 
 8.5. Add workflow logging
    - Log start of each workflow step
@@ -513,6 +528,10 @@ This document breaks down the PRD v1.3 into individual tasks following ATDD (Acc
 **When** querying for 24-hour statistics
 **Then** the correct count and success rate are calculated
 
+**Given** a job has retry attempts
+**When** querying the job
+**Then** the retry history is included with full details (timestamp, attempt number, retry type, error message, result)
+
 ### Subtasks
 
 9.1. Select database technology
@@ -522,7 +541,9 @@ This document breaks down the PRD v1.3 into individual tasks following ATDD (Acc
 
 9.2. Design database schema
    - Create jobs table with all required fields
+   - Create retry_history table (jobId, timestamp, attemptNumber, retryType, errorMessage, result)
    - Add indexes for common queries (status, receivedDate)
+   - Add foreign key relationship between retry_history and jobs
    - Create migration scripts
    - Document schema
 
@@ -530,7 +551,9 @@ This document breaks down the PRD v1.3 into individual tasks following ATDD (Acc
    - Create JobRepository service layer
    - Implement createJob using Effect
    - Implement updateJob using Effect
-   - Implement getJob using Effect
+   - Implement getJob using Effect (include retry history)
+   - Implement addRetryAttempt using Effect
+   - Implement getRetryHistory using Effect
 
 9.4. Implement query operations
    - Implement listJobs with pagination
@@ -580,11 +603,11 @@ This document breaks down the PRD v1.3 into individual tasks following ATDD (Acc
 
 ### Subtasks
 
-10.1. Set up admin panel framework
-   - Choose frontend framework/library (React, Vue, or vanilla TS)
+10.1. Set up admin panel with Next.js
+   - Initialize Next.js project with TypeScript
    - Set up build configuration
-   - Create basic HTML layout
-   - Add CSS framework (or custom CSS)
+   - Create basic page layout structure
+   - Add CSS solution (Tailwind CSS or similar)
 
 10.2. Create dashboard UI components
    - Create StatsCard component (24h processed, success/fail counts)
@@ -621,7 +644,6 @@ This document breaks down the PRD v1.3 into individual tasks following ATDD (Acc
    - Use clear, large text
    - Color-code status (green = good, red = problem)
    - Add helpful tooltips
-   - Ensure high contrast
 
 ---
 
@@ -653,7 +675,7 @@ This document breaks down the PRD v1.3 into individual tasks following ATDD (Acc
 ### Subtasks
 
 11.1. Create email log UI components
-   - Create EmailLogTable component
+   - Create EmailLogTable component (Next.js)
    - Create EmailLogRow component (status, subject, dates, error, actions)
    - Create Pagination component
    - Create StatusBadge component (color-coded)
@@ -705,10 +727,14 @@ This document breaks down the PRD v1.3 into individual tasks following ATDD (Acc
 **When** I view the preview
 **Then** I see the final document with the error message
 
+**Given** I click "Print" on an email log entry
+**When** the print action is triggered
+**Then** the document is sent directly to the printer without showing a preview
+
 ### Subtasks
 
 12.1. Create preview UI components
-   - Create EmailPreviewModal component
+   - Create EmailPreviewModal component (Next.js)
    - Create tabs for "Original Email" and "Final Output"
    - Add close button
    - Make modal responsive
@@ -731,10 +757,11 @@ This document breaks down the PRD v1.3 into individual tasks following ATDD (Acc
    - Show loading state while fetching
    - Handle missing data gracefully
 
-12.5. Add print button to preview
-   - Add "Print Preview" button
-   - Open browser print dialog for preview content
-   - Ensure print styling is applied
+12.5. Add print button functionality
+   - Add "Print" button separate from "Preview" button
+   - Create POST /api/emails/:id/print endpoint
+   - Send document directly to printer (bypass browser dialog)
+   - Show success/error notification after print attempt
 
 ---
 
@@ -763,6 +790,10 @@ This document breaks down the PRD v1.3 into individual tasks following ATDD (Acc
 **When** I view the log
 **Then** the status shows "Processing" and the Retry button is disabled
 
+**Given** a job has been retried multiple times
+**When** I hover over the retry indicator
+**Then** I see a tooltip with retry count and human-readable messages for each attempt
+
 ### Subtasks
 
 13.1. Create retry UI
@@ -782,11 +813,12 @@ This document breaks down the PRD v1.3 into individual tasks following ATDD (Acc
    - Use job locking or status check
    - Return error if job is already processing
 
-13.4. Add retry audit log
-   - Track when manual retries occur
-   - Record who initiated retry (if auth implemented)
-   - Store retry count
-   - Display retry history in preview
+13.4. Add retry tracking with tooltip
+   - Track each manual retry attempt with timestamp
+   - Store human-readable message for each retry result
+   - Store retry count in job record
+   - Display retry indicator icon when retries exist
+   - Show tooltip popup on hover with full retry history
 
 13.5. Add success/error notifications
    - Show toast notification on retry success
@@ -823,7 +855,7 @@ This document breaks down the PRD v1.3 into individual tasks following ATDD (Acc
 ### Subtasks
 
 14.1. Create configuration UI components
-   - Create ConfigurationForm component
+   - Create ConfigurationForm component (Next.js)
    - Create sections: EmailConfig, FilterConfig, StationConfig, CUPSConfig, PrintConfig, MapConfig
    - Add form validation
    - Add save/cancel buttons
@@ -867,7 +899,7 @@ This document breaks down the PRD v1.3 into individual tasks following ATDD (Acc
 
 ---
 
-## Task 15: Authentication and Security
+## Task 20: Authentication and Security
 
 ### Story
 **As a** system administrator
@@ -894,41 +926,41 @@ This document breaks down the PRD v1.3 into individual tasks following ATDD (Acc
 
 ### Subtasks
 
-15.1. Design authentication approach
+20.1. Design authentication approach
    - Choose authentication method (JWT, session-based, or basic auth)
    - Document security considerations for local network deployment
    - Plan password storage (hashed with bcrypt/argon2)
 
-15.2. Create authentication UI
-   - Create Login page component
+20.2. Create authentication UI
+   - Create Login page component (Next.js)
    - Add username and password fields
    - Add "Login" button
    - Style for simplicity
 
-15.3. Implement authentication backend
+20.3. Implement authentication backend
    - Create POST /api/auth/login endpoint
    - Verify credentials against stored hash
    - Generate session token/JWT
    - Return token to client
 
-15.4. Implement authentication middleware
+20.4. Implement authentication middleware
    - Create middleware to check authentication on protected routes
    - Return 401 Unauthorized if not authenticated
    - Apply to all /api routes except /api/auth/login
 
-15.5. Implement session management
+20.5. Implement session management
    - Store session in cookie or localStorage
    - Set session expiration (e.g., 8 hours)
    - Implement logout functionality
    - Clear session on logout
 
-15.6. Add password management
+20.6. Add password management
    - Create initial admin password on first run
    - Store password hash securely
    - Add ability to change password in config UI
    - Require current password to change
 
-15.7. Test security
+20.7. Test security
    - Test unauthenticated access blocked
    - Test session expiration
    - Test logout
@@ -936,7 +968,7 @@ This document breaks down the PRD v1.3 into individual tasks following ATDD (Acc
 
 ---
 
-## Task 16: Error Handling and User-Friendly Messages
+## Task 15: Error Handling and User-Friendly Messages
 
 ### Story
 **As a** system
@@ -963,37 +995,37 @@ This document breaks down the PRD v1.3 into individual tasks following ATDD (Acc
 
 ### Subtasks
 
-16.1. Create error message mapping
+15.1. Create error message mapping
    - Define map of technical errors to user-friendly messages
    - Create ErrorMessage type with user/technical fields
    - Document all error scenarios from PRD
 
-16.2. Implement error translation service
+15.2. Implement error translation service
    - Create toUserFriendlyMessage(error) function
    - Map known errors to friendly messages
    - Return generic message for unknown errors
    - Preserve technical details for logging
 
-16.3. Update all error handling
+15.3. Update all error handling
    - Apply error translation in document assembly
    - Apply error translation in admin panel
    - Apply error translation in printed output
    - Log technical details, show friendly message
 
-16.4. Add error templates for printing
+15.4. Add error templates for printing
    - Create HTML template for GPS not found
    - Create HTML template for map service errors
    - Create HTML template for generic errors
    - Ensure high visibility (red border, large text)
 
-16.5. Add error documentation
+15.5. Add error documentation
    - Document all possible error messages
    - Create troubleshooting guide
    - Add error codes for support reference
 
 ---
 
-## Task 17: Logging and Monitoring
+## Task 16: Logging and Monitoring
 
 ### Story
 **As a** system administrator
@@ -1016,38 +1048,38 @@ This document breaks down the PRD v1.3 into individual tasks following ATDD (Acc
 
 ### Subtasks
 
-17.1. Set up logging framework
+16.1. Set up logging framework
    - Choose logging library compatible with Effect (e.g., pino)
    - Configure log levels (debug, info, warn, error)
    - Configure log output (console, file)
    - Set up log rotation for file logs
 
-17.2. Implement structured logging
+16.2. Implement structured logging
    - Add context to all log entries (jobId, step, timestamp)
    - Use consistent log format (JSON for parsing)
    - Include correlation IDs for tracking jobs
    - Log performance metrics (duration of each step)
 
-17.3. Add logging to all services
+16.3. Add logging to all services
    - Log email monitoring events
    - Log GPS extraction results
    - Log map generation requests/responses
    - Log print job attempts
    - Log configuration changes
 
-17.4. Implement log aggregation (optional)
+16.4. Implement log aggregation (optional)
    - Consider log aggregation for production (e.g., Loki, ELK)
    - Document how to access logs
    - Add log search capability
 
-17.5. Add monitoring alerts (future enhancement)
+16.5. Add monitoring alerts (future enhancement)
    - Define alert conditions (e.g., 5 consecutive failures)
    - Document alerting strategy
    - Out of scope for v1.3 but plan for future
 
 ---
 
-## Task 18: Deployment and System Integration
+## Task 17: Deployment and System Integration
 
 ### Story
 **As a** system administrator
@@ -1070,37 +1102,31 @@ This document breaks down the PRD v1.3 into individual tasks following ATDD (Acc
 
 ### Subtasks
 
-18.1. Create deployment documentation
+17.1. Create deployment documentation
    - Write step-by-step installation guide
    - Document system requirements (Node.js version, CUPS, etc.)
    - Document network requirements
    - Create troubleshooting section
 
-18.2. Create systemd service
+17.2. Create systemd service
    - Write systemd unit file for the application
    - Configure auto-restart on failure
    - Configure startup on boot
    - Set up logging to systemd journal
 
-18.3. Create installation script
+17.3. Create installation script
    - Write bash script to install dependencies
    - Set up database
    - Configure initial admin password
    - Test on clean system
 
-18.4. Create configuration template
+17.4. Create configuration template
    - Provide example .env file
    - Document all required settings
    - Include sensible defaults
    - Add validation for required settings
 
-18.5. Test deployment on Raspberry Pi
-   - Deploy to actual Raspberry Pi
-   - Test email processing
-   - Test printing to network CUPS
-   - Measure performance and resource usage
-
-18.6. Create backup and restore procedures
+17.5. Create backup and restore procedures
    - Document database backup
    - Document configuration backup
    - Create restore script
@@ -1108,7 +1134,7 @@ This document breaks down the PRD v1.3 into individual tasks following ATDD (Acc
 
 ---
 
-## Task 19: End-to-End Testing
+## Task 18: End-to-End Testing
 
 ### Story
 **As a** developer
@@ -1127,19 +1153,19 @@ This document breaks down the PRD v1.3 into individual tasks following ATDD (Acc
 
 ### Subtasks
 
-19.1. Set up E2E test framework
+18.1. Set up E2E test framework
    - Choose testing framework (e.g., Vitest, Jest)
    - Set up test environment with test database
    - Configure mock email server
    - Configure mock CUPS server
 
-19.2. Create test fixtures
+18.2. Create test fixtures
    - Create sample dispatch emails with valid GPS
    - Create emails with multiple GPS coordinates
    - Create emails with no GPS coordinates
    - Create emails that fail filters
 
-19.3. Write happy path E2E test
+18.3. Write happy path E2E test
    - Send test email
    - Verify it's filtered correctly
    - Verify GPS extraction
@@ -1147,20 +1173,20 @@ This document breaks down the PRD v1.3 into individual tasks following ATDD (Acc
    - Verify document assembly
    - Verify print job created
 
-19.4. Write failure scenario tests
+18.4. Write failure scenario tests
    - Test GPS not found scenario
    - Test map service unavailable
    - Test CUPS unreachable (with retries)
    - Verify error messages in output
 
-19.5. Write admin panel E2E tests
+18.5. Write admin panel E2E tests
    - Test dashboard loads with correct stats
    - Test email log displays jobs
    - Test preview functionality
    - Test retry functionality
    - Test configuration updates
 
-19.6. Create performance tests
+18.6. Create performance tests
    - Test system handles 10 concurrent emails
    - Verify 30-second processing target
    - Measure memory usage
@@ -1168,7 +1194,7 @@ This document breaks down the PRD v1.3 into individual tasks following ATDD (Acc
 
 ---
 
-## Task 20: Documentation and User Training Materials
+## Task 19: Documentation and User Training Materials
 
 ### Story
 **As a** fire department administrator
@@ -1187,7 +1213,7 @@ This document breaks down the PRD v1.3 into individual tasks following ATDD (Acc
 
 ### Subtasks
 
-20.1. Write user guide
+19.1. Write user guide
    - Explain system overview and purpose
    - Document how to access admin panel
    - Explain dashboard metrics
@@ -1195,31 +1221,25 @@ This document breaks down the PRD v1.3 into individual tasks following ATDD (Acc
    - Explain how to retry failed jobs
    - Document how to preview emails
 
-20.2. Write administrator guide
+19.2. Write administrator guide
    - Document how to configure email settings
    - Explain filter rules with examples
    - Document how to update station location
    - Explain printer configuration
    - Document security best practices
 
-20.3. Create troubleshooting guide
+19.3. Create troubleshooting guide
    - List common errors with solutions
    - "Email service indicator is red" → check credentials, network
    - "CUPS indicator is red" → verify CUPS server running
    - "Map indicator is yellow" → check API key
    - Document how to access logs
 
-20.4. Create quick reference card
+19.4. Create quick reference card
    - One-page overview of key functions
    - Dashboard color codes
    - Common actions (retry, preview, configure)
    - Emergency contact for technical support
-
-20.5. Create video tutorials (optional)
-   - Screen recording of dashboard walkthrough
-   - Demo of retrying a failed job
-   - Demo of updating configuration
-   - Out of scope for v1.3 but valuable for training
 
 ---
 
@@ -1242,11 +1262,14 @@ Recommended order of implementation:
 **Phase 5: Admin Panel - Actions (Tasks 13-14)**
 - Adds retry and configuration capabilities
 
-**Phase 6: Security and Production Readiness (Tasks 15-18)**
-- Secures the system and prepares for deployment
+**Phase 6: Production Readiness (Tasks 15-17)**
+- Error handling, logging, and deployment preparation
 
-**Phase 7: Testing and Documentation (Tasks 19-20)**
+**Phase 7: Testing and Documentation (Tasks 18-19)**
 - Validates system and enables user adoption
+
+**Phase 8: Security (Task 20)**
+- Implements authentication and secures the system
 
 ---
 
