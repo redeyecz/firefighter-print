@@ -303,11 +303,18 @@ const makeMapService = (): IMapService => {
 };
 
 /**
- * MapService Layer
+ * MapService Layer (without HttpClient - for testing)
+ * Use this in tests to provide your own HttpClient mock
  */
-export const MapServiceLive = Layer.effect(
+export const MapServiceLayer = Layer.effect(
   MapService,
   Effect.gen(function* () {
     return makeMapService();
   })
-).pipe(Layer.provide(FetchHttpClient.layer));
+);
+
+/**
+ * MapService Layer (with FetchHttpClient)
+ * Use this in production
+ */
+export const MapServiceLive = MapServiceLayer.pipe(Layer.provide(FetchHttpClient.layer));

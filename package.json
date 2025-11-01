@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
+    "lint:fix": "eslint --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "vitest",
@@ -27,6 +28,7 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@effect/vitest": "^0.26.0",
     "@eslint/eslintrc": "^3.3.1",
     "@types/node": "^22.10.5",
     "@types/react": "^19.0.6",
