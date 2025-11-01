@@ -43,5 +43,8 @@ export const runEffectSafe = <A, E>(
   onError: (error: E) => A
 ): Promise<A> =>
   Effect.runPromise(
-    Effect.provide(Effect.catchAll(effect, (e) => Effect.succeed(onError(e))), RuntimeLive)
+    Effect.provide(
+      Effect.catchAll(effect, (e) => Effect.succeed(onError(e))),
+      RuntimeLive
+    )
   );

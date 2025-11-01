@@ -23,10 +23,7 @@ export interface IGPSExtraction {
 /**
  * GPSExtraction service tag
  */
-export class GPSExtraction extends Context.Tag("GPSExtraction")<
-  GPSExtraction,
-  IGPSExtraction
->() {}
+export class GPSExtraction extends Context.Tag("GPSExtraction")<GPSExtraction, IGPSExtraction>() {}
 
 /**
  * Regex patterns for Decimal Degrees format

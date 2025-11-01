@@ -24,10 +24,7 @@ export interface EmailClientService {
 /**
  * EmailClient service tag
  */
-export class EmailClient extends Context.Tag("EmailClient")<
-  EmailClient,
-  EmailClientService
->() {}
+export class EmailClient extends Context.Tag("EmailClient")<EmailClient, EmailClientService>() {}
 
 /**
  * Parse ImapFlow message to our Email domain model

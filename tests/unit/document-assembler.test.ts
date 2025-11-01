@@ -41,7 +41,13 @@ const testMapResponse = new MapResponse({
   imageUrl: "https://api.mapy.com/v1/static/map?test=true",
   route: new RouteGeometry({
     type: "geojson",
-    data: JSON.stringify({ type: "LineString", coordinates: [[17.25, 49.59], [17.89, 49.95]] }),
+    data: JSON.stringify({
+      type: "LineString",
+      coordinates: [
+        [17.25, 49.59],
+        [17.89, 49.95],
+      ],
+    }),
     distance: 5420,
     duration: 480,
   }),

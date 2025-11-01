@@ -58,5 +58,6 @@ export const MockConfigService = Layer.succeed(
   ConfigService,
   ConfigService.of({
     getConfig: () => Effect.succeed(testAppConfig),
+    updateConfig: (_config: AppConfig) => Effect.succeed(undefined),
   })
 );

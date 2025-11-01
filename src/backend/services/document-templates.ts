@@ -3,7 +3,11 @@
  * Uses Tailwind CSS for styling with print-specific optimizations
  */
 
-import type { ErrorTemplateData, WarningTemplateData, MapTemplateData } from "@/backend/domain/document";
+import type {
+  ErrorTemplateData,
+  WarningTemplateData,
+  MapTemplateData,
+} from "@/backend/domain/document";
 
 /**
  * Tailwind CSS Configuration for Print Documents
@@ -114,7 +118,7 @@ export const createErrorTemplate = (data: ErrorTemplateData): string => `
       <p class="critical-text text-red-700 mb-2">
         ${escapeHtml(data.message)}
       </p>
-      ${data.details ? `<p class="text-base text-red-600 mt-3 font-mono">${escapeHtml(data.details)}</p>` : ''}
+      ${data.details ? `<p class="text-base text-red-600 mt-3 font-mono">${escapeHtml(data.details)}</p>` : ""}
     </div>
   </div>
 </div>
@@ -151,7 +155,9 @@ export const createMapTemplate = (data: MapTemplateData): string => {
       </div>
     </div>
 
-    ${distanceKm && durationMin ? `
+    ${
+      distanceKm && durationMin
+        ? `
     <div class="grid grid-cols-2 gap-4 mb-6 bg-green-50 p-4 rounded">
       <div>
         <p class="text-sm text-gray-600 font-semibold">Distance</p>
@@ -162,7 +168,9 @@ export const createMapTemplate = (data: MapTemplateData): string => {
         <p class="critical-text text-green-700">${durationMin} min</p>
       </div>
     </div>
-    ` : ''}
+    `
+        : ""
+    }
 
     <!-- Map Image -->
     <div class="border-4 border-gray-400 rounded overflow-hidden">
@@ -188,16 +196,16 @@ export const assembleDocument = (
   layout: "single-page" | "two-page"
 ): string => {
   const separator = createSeparator();
-  const warningBlocks = warnings.map(w => createWarningTemplate({ message: w })).join('\n');
+  const warningBlocks = warnings.map((w) => createWarningTemplate({ message: w })).join("\n");
 
   // Add page break for two-page layout
-  const pageBreak = layout === "two-page" ? '<div class="page-break-before"></div>' : '';
+  const pageBreak = layout === "two-page" ? '<div class="page-break-before"></div>' : "";
 
   const appendedContent = `
     ${pageBreak}
     ${separator}
     ${warningBlocks}
-    ${appendedSections.join('\n')}
+    ${appendedSections.join("\n")}
   `;
 
   return `

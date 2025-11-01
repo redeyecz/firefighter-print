@@ -1,6 +1,7 @@
 # Task 9: Job Persistence Layer
 
 ## Story
+
 **As a** system
 **I want** to persist job records to a database
 **So that** the admin panel can display processing history
@@ -30,41 +31,47 @@
 ## Subtasks
 
 9.1. Select database technology
-   - Evaluate options: SQLite (simple, local), PostgreSQL (robust)
-   - Document choice rationale
-   - Consider deployment on Raspberry Pi
 
-9.2. Design database schema
-   - Create jobs table with all required fields
-   - Create retry_history table (jobId, timestamp, attemptNumber, retryType, errorMessage, result)
-   - Add indexes for common queries (status, receivedDate)
-   - Add foreign key relationship between retry_history and jobs
-   - Create migration scripts
-   - Document schema
+- Evaluate options: SQLite (simple, local), PostgreSQL (robust)
+- Document choice rationale
+- Consider deployment on Raspberry Pi
 
-9.3. Implement repository with Effect-TS
-   - Create JobRepository service layer
-   - Implement createJob using Effect
-   - Implement updateJob using Effect
-   - Implement getJob using Effect (include retry history)
-   - Implement addRetryAttempt using Effect
-   - Implement getRetryHistory using Effect
+  9.2. Design database schema
 
-9.4. Implement query operations
-   - Implement listJobs with pagination
-   - Implement filterByStatus
-   - Implement filterByDateRange
-   - Implement get24HourStats
+- Create jobs table with all required fields
+- Create retry_history table (jobId, timestamp, attemptNumber, retryType, errorMessage, result)
+- Add indexes for common queries (status, receivedDate)
+- Add foreign key relationship between retry_history and jobs
+- Create migration scripts
+- Document schema
 
-9.5. Add database migrations
-   - Create initial schema migration
-   - Add migration runner
-   - Version migrations
-   - Document rollback procedures
+  9.3. Implement repository with Effect-TS
 
-9.6. Add unit tests
-   - Test CRUD operations
-   - Test pagination
-   - Test filtering
-   - Test statistics calculations
-   - Use in-memory DB for tests
+- Create JobRepository service layer
+- Implement createJob using Effect
+- Implement updateJob using Effect
+- Implement getJob using Effect (include retry history)
+- Implement addRetryAttempt using Effect
+- Implement getRetryHistory using Effect
+
+  9.4. Implement query operations
+
+- Implement listJobs with pagination
+- Implement filterByStatus
+- Implement filterByDateRange
+- Implement get24HourStats
+
+  9.5. Add database migrations
+
+- Create initial schema migration
+- Add migration runner
+- Version migrations
+- Document rollback procedures
+
+  9.6. Add unit tests
+
+- Test CRUD operations
+- Test pagination
+- Test filtering
+- Test statistics calculations
+- Use in-memory DB for tests

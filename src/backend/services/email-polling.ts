@@ -56,9 +56,7 @@ export const makeEmailPollingService = (): EmailPollingService => {
       // Connect to email server with retry
       yield* Effect.retry(
         emailClient.connect(),
-        Schedule.exponential(Duration.seconds(5)).pipe(
-          Schedule.intersect(Schedule.recurs(3))
-        )
+        Schedule.exponential(Duration.seconds(5)).pipe(Schedule.intersect(Schedule.recurs(3)))
       ).pipe(
         Effect.tapError((error) =>
           Effect.sync(() =>
@@ -86,9 +84,7 @@ export const makeEmailPollingService = (): EmailPollingService => {
           }
         }).pipe(
           Effect.retry(
-            Schedule.exponential(Duration.seconds(2)).pipe(
-              Schedule.intersect(Schedule.recurs(2))
-            )
+            Schedule.exponential(Duration.seconds(2)).pipe(Schedule.intersect(Schedule.recurs(2)))
           ),
           Effect.catchAll((error) =>
             Effect.gen(function* () {

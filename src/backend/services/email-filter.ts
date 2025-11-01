@@ -33,7 +33,9 @@ export class EmailFilter extends Context.Tag("EmailFilter")<EmailFilter, IEmailF
 /**
  * Validate filter configuration for mutual exclusivity
  */
-export const validateFilterConfig = (filterConfig: FilterConfig): Effect.Effect<void, ConfigError> =>
+export const validateFilterConfig = (
+  filterConfig: FilterConfig
+): Effect.Effect<void, ConfigError> =>
   Effect.gen(function* () {
     if (filterConfig.subjectContains && filterConfig.subjectRegex) {
       return yield* Effect.fail(
@@ -70,15 +72,12 @@ const makeEmailFilter = (): IEmailFilter => {
   /**
    * Check if email subject matches the regex pattern
    */
-  const matchesRegex = (
-    email: Email,
-    subjectRegex: string
-  ): Effect.Effect<boolean, ConfigError> =>
+  const matchesRegex = (email: Email, subjectRegex: string): Effect.Effect<boolean, ConfigError> =>
     Effect.gen(function* () {
       try {
         const regex = new RegExp(subjectRegex);
         return regex.test(email.subject);
-      } catch (error) {
+      } catch {
         return yield* Effect.fail(
           new ConfigError({
             message: `Invalid regex pattern: ${subjectRegex}`,

@@ -53,8 +53,7 @@ const loadFromEnv = (): Effect.Effect<Partial<AppConfig>, ConfigError> =>
           retryAttempts: parseInt(process.env.CUPS_RETRY_ATTEMPTS || "3"),
           retryDelayMs: parseInt(process.env.CUPS_RETRY_DELAY_MS || "30000"),
         },
-        printFormat:
-          (process.env.PRINT_FORMAT as "single-page" | "two-page") || "single-page",
+        printFormat: (process.env.PRINT_FORMAT as "single-page" | "two-page") || "single-page",
         map: {
           apiKey: process.env.MAP_API_KEY || "",
           provider: (process.env.MAP_PROVIDER as "mapycz" | "openrouteservice") || "mapycz",
@@ -62,7 +61,8 @@ const loadFromEnv = (): Effect.Effect<Partial<AppConfig>, ConfigError> =>
           width: parseInt(process.env.MAP_WIDTH || "800"),
           height: parseInt(process.env.MAP_HEIGHT || "600"),
           mapset: (process.env.MAP_MAPSET as "basic" | "outdoor" | "winter" | "aerial") || "basic",
-          routeType: (process.env.MAP_ROUTE_TYPE as "car" | "car_fast" | "bicycle" | "foot") || "car_fast",
+          routeType:
+            (process.env.MAP_ROUTE_TYPE as "car" | "car_fast" | "bicycle" | "foot") || "car_fast",
         },
         database: {
           path: process.env.DATABASE_PATH || "./data/dispatch.db",
@@ -80,12 +80,9 @@ const loadFromEnv = (): Effect.Effect<Partial<AppConfig>, ConfigError> =>
 /**
  * Validate configuration using Effect Schema
  */
-const validateConfig = (
-  config: unknown
-): Effect.Effect<AppConfig, ConfigError> =>
-  Effect.flatMap(
-    S.decodeUnknown(AppConfigSchema)(config),
-    (validatedConfig) => Effect.succeed(validatedConfig)
+const validateConfig = (config: unknown): Effect.Effect<AppConfig, ConfigError> =>
+  Effect.flatMap(S.decodeUnknown(AppConfigSchema)(config), (validatedConfig) =>
+    Effect.succeed(validatedConfig)
   ).pipe(
     Effect.catchAll((error) =>
       Effect.fail(

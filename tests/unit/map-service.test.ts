@@ -28,7 +28,7 @@ const createMockHttpClient = (
   const mockExecute = () =>
     Effect.succeed(
       HttpClientResponse.fromWeb(
-        new Request("http://test.example.com"),
+        HttpClientRequest.get("http://test.example.com"),
         new Response(JSON.stringify(responseData), {
           status,
           headers: {
@@ -89,7 +89,10 @@ describe("MapService - Routing API", () => {
       });
 
       const result = await Effect.runPromise(
-        Effect.provide(program, Layer.merge(MapServiceLive, Layer.merge(MockConfigService, mockHttpClient)))
+        Effect.provide(
+          program,
+          Layer.merge(MapServiceLive, Layer.merge(MockConfigService, mockHttpClient))
+        )
       );
 
       expect(result.distance).toBe(198450);
@@ -114,7 +117,10 @@ describe("MapService - Routing API", () => {
       });
 
       const result = await Effect.runPromise(
-        Effect.provide(program, Layer.merge(MapServiceLive, Layer.merge(MockConfigService, mockHttpClient)))
+        Effect.provide(
+          program,
+          Layer.merge(MapServiceLive, Layer.merge(MockConfigService, mockHttpClient))
+        )
       );
 
       expect(result.distance).toBe(5420);
@@ -136,7 +142,10 @@ describe("MapService - Routing API", () => {
 
       await expect(
         Effect.runPromise(
-          Effect.provide(program, Layer.merge(MapServiceLive, Layer.merge(MockConfigService, mockHttpClient)))
+          Effect.provide(
+            program,
+            Layer.merge(MapServiceLive, Layer.merge(MockConfigService, mockHttpClient))
+          )
         )
       ).rejects.toThrow("No route found");
     });
@@ -154,7 +163,10 @@ describe("MapService - Routing API", () => {
 
       await expect(
         Effect.runPromise(
-          Effect.provide(program, Layer.merge(MapServiceLive, Layer.merge(MockConfigService, mockHttpClient)))
+          Effect.provide(
+            program,
+            Layer.merge(MapServiceLive, Layer.merge(MockConfigService, mockHttpClient))
+          )
         )
       ).rejects.toThrow("Invalid API key");
     });
@@ -172,13 +184,16 @@ describe("MapService - Routing API", () => {
 
       await expect(
         Effect.runPromise(
-          Effect.provide(program, Layer.merge(MapServiceLive, Layer.merge(MockConfigService, mockHttpClient)))
+          Effect.provide(
+            program,
+            Layer.merge(MapServiceLive, Layer.merge(MockConfigService, mockHttpClient))
+          )
         )
       ).rejects.toThrow("Mapping service is unavailable");
     });
 
     it("should timeout after configured duration", async () => {
-      const mockHttpClient = createTimeoutHttpClient(15000); // Longer than 10s timeout
+      const mockHttpClient = createTimeoutHttpClient();
 
       const program = Effect.gen(function* () {
         const mapService = yield* MapService;
@@ -190,7 +205,10 @@ describe("MapService - Routing API", () => {
 
       await expect(
         Effect.runPromise(
-          Effect.provide(program, Layer.merge(MapServiceLive, Layer.merge(MockConfigService, mockHttpClient)))
+          Effect.provide(
+            program,
+            Layer.merge(MapServiceLive, Layer.merge(MockConfigService, mockHttpClient))
+          )
         )
       ).rejects.toThrow("timed out");
     });
@@ -213,7 +231,10 @@ describe("MapService - Routing API", () => {
 
       await expect(
         Effect.runPromise(
-          Effect.provide(program, Layer.merge(MapServiceLive, Layer.merge(MockConfigService, mockHttpClient)))
+          Effect.provide(
+            program,
+            Layer.merge(MapServiceLive, Layer.merge(MockConfigService, mockHttpClient))
+          )
         )
       ).rejects.toThrow("No route found");
     });
@@ -226,7 +247,7 @@ describe("MapService - Routing API", () => {
         callCount++;
         return Effect.succeed(
           HttpClientResponse.fromWeb(
-            new Request("http://test.example.com"),
+            HttpClientRequest.get("http://test.example.com"),
             new Response(JSON.stringify(mockMapyCzRouting401Error), {
               status: 401,
               headers: { "Content-Type": "application/json" },
@@ -259,7 +280,10 @@ describe("MapService - Routing API", () => {
 
       await expect(
         Effect.runPromise(
-          Effect.provide(program, Layer.merge(MapServiceLive, Layer.merge(MockConfigService, mockHttpClient)))
+          Effect.provide(
+            program,
+            Layer.merge(MapServiceLive, Layer.merge(MockConfigService, mockHttpClient))
+          )
         )
       ).rejects.toThrow("Invalid API key");
 
@@ -273,7 +297,7 @@ describe("MapService - Routing API", () => {
         callCount++;
         return Effect.succeed(
           HttpClientResponse.fromWeb(
-            new Request("http://test.example.com"),
+            HttpClientRequest.get("http://test.example.com"),
             new Response(JSON.stringify(mockMapyCzRouting404Error), {
               status: 404,
               headers: { "Content-Type": "application/json" },
@@ -306,7 +330,10 @@ describe("MapService - Routing API", () => {
 
       await expect(
         Effect.runPromise(
-          Effect.provide(program, Layer.merge(MapServiceLive, Layer.merge(MockConfigService, mockHttpClient)))
+          Effect.provide(
+            program,
+            Layer.merge(MapServiceLive, Layer.merge(MockConfigService, mockHttpClient))
+          )
         )
       ).rejects.toThrow("No route found");
 
@@ -320,13 +347,11 @@ describe("MapService - Routing API", () => {
         callCount++;
         // Fail first 2 times, succeed on 3rd
         if (callCount < 3) {
-          return Effect.fail(
-            new Error("Network failure")
-          );
+          return Effect.fail(new Error("Network failure"));
         }
         return Effect.succeed(
           HttpClientResponse.fromWeb(
-            new Request("http://test.example.com"),
+            HttpClientRequest.get("http://test.example.com"),
             new Response(JSON.stringify(mockMapyCzRoutingSuccess), {
               status: 200,
               headers: { "Content-Type": "application/json" },
@@ -358,7 +383,10 @@ describe("MapService - Routing API", () => {
       });
 
       const result = await Effect.runPromise(
-        Effect.provide(program, Layer.merge(MapServiceLive, Layer.merge(MockConfigService, mockHttpClient)))
+        Effect.provide(
+          program,
+          Layer.merge(MapServiceLive, Layer.merge(MockConfigService, mockHttpClient))
+        )
       );
 
       // Should succeed after retries
@@ -407,12 +435,16 @@ describe("MapService - Static Map URL Generation", () => {
       // Check for start marker (green, label A)
       expect(url).toContain("color:green");
       expect(url).toContain("label:A");
-      expect(url).toContain(`${testCoordinates.fireStationOlomouc.longitude},${testCoordinates.fireStationOlomouc.latitude}`);
+      expect(url).toContain(
+        `${testCoordinates.fireStationOlomouc.longitude},${testCoordinates.fireStationOlomouc.latitude}`
+      );
 
       // Check for end marker (red, label B)
       expect(url).toContain("color:red");
       expect(url).toContain("label:B");
-      expect(url).toContain(`${testCoordinates.emergencyLocationOlomouc.longitude},${testCoordinates.emergencyLocationOlomouc.latitude}`);
+      expect(url).toContain(
+        `${testCoordinates.emergencyLocationOlomouc.longitude},${testCoordinates.emergencyLocationOlomouc.latitude}`
+      );
     });
 
     it("should include route path when provided", async () => {
@@ -494,7 +526,7 @@ describe("MapService - Complete Flow", () => {
     });
 
     const result = await Effect.runPromise(
-      Effect.provide(program, Layer.mergeAll(MapService.Default, MockConfigService, mockHttpClient))
+      Effect.provide(program, Layer.mergeAll(MapServiceLive, MockConfigService, mockHttpClient))
     );
 
     // Check MapResponse structure
@@ -524,7 +556,10 @@ describe("MapService - Complete Flow", () => {
 
     await expect(
       Effect.runPromise(
-        Effect.provide(program, Layer.merge(MapServiceLive, Layer.merge(MockConfigService, mockHttpClient)))
+        Effect.provide(
+          program,
+          Layer.merge(MapServiceLive, Layer.merge(MockConfigService, mockHttpClient))
+        )
       )
     ).rejects.toThrow("Invalid API key");
   });

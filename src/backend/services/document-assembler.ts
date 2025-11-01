@@ -8,11 +8,7 @@ import { PrintDocument, DocumentSection } from "@/backend/domain/document";
 import type { MapResponse } from "@/backend/domain/map";
 import type { GPSExtractionResult } from "@/backend/domain/gps";
 import { DocumentError } from "@/lib/errors";
-import {
-  createErrorTemplate,
-  createMapTemplate,
-  assembleDocument,
-} from "./document-templates";
+import { createErrorTemplate, createMapTemplate, assembleDocument } from "./document-templates";
 import { ConfigService } from "@/backend/config/loader";
 
 /**
@@ -99,7 +95,8 @@ const makeDocumentAssembler = (): IDocumentAssembler => {
           const errorHtml = createErrorTemplate({
             title: "Map Generation Failed",
             message: map.left.message,
-            details: "The route map could not be generated. Please use GPS coordinates above for navigation.",
+            details:
+              "The route map could not be generated. Please use GPS coordinates above for navigation.",
           });
 
           sections.push(

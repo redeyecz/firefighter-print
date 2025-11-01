@@ -2,23 +2,15 @@
   "mcpServers": {
     "context7": {
       "command": "npx",
-      "args": [
-        "-y",
-        "@upstash/context7-mcp"
-      ]
+      "args": ["-y", "@upstash/context7-mcp"]
     },
     "effect-docs": {
       "command": "npx",
-      "args": [
-        "-y",
-        "effect-mcp@latest"
-      ]
+      "args": ["-y", "effect-mcp@latest"]
     },
-      "playwright": {
-        "command": "npx",
-        "args": [
-          "@playwright/mcp@latest"
-        ]
-      }
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"]
     }
   }
+}

@@ -51,28 +51,33 @@ This system automatically processes incoming dispatch emails, extracts GPS coord
 ### Installation
 
 1. Clone the repository:
+
 ```bash
 git clone <repository-url>
 cd firefighter-alarm
 ```
 
 2. Install dependencies:
+
 ```bash
 bun install
 ```
 
 3. Set up environment variables:
+
 ```bash
 cp .env.example .env
 # Edit .env with your configuration
 ```
 
 4. Run the development server:
+
 ```bash
 bun run dev
 ```
 
 5. Access the application:
+
 - Main app: http://localhost:3000
 - Admin panel: http://localhost:3000/admin
 
@@ -101,6 +106,7 @@ bun run test:coverage    # Run tests with coverage
 All configuration is managed through environment variables and validated using Effect Schema. See `.env.example` for all available options.
 
 Key configuration areas:
+
 - Email monitoring (IMAP)
 - Filter rules (sender, subject)
 - Station location (GPS)
@@ -111,6 +117,7 @@ Key configuration areas:
 ## Task Implementation Progress
 
 ✅ Task 1: Project Setup and Core Infrastructure (COMPLETED)
+
 - Bun project with TypeScript
 - Next.js 15 with App Router
 - Effect-TS configuration
@@ -119,6 +126,7 @@ Key configuration areas:
 - Vitest testing setup
 
 ✅ Task 2: Email Monitoring Service (COMPLETED)
+
 - Email domain models with Effect Schema
 - ImapFlow integration (MIT licensed, v1.1.1)
 - IMAP client wrapper with Effect-TS
@@ -128,6 +136,7 @@ Key configuration areas:
 - Mock IMAP client for testing
 
 ✅ Task 3: Email Filtering Service (COMPLETED)
+
 - Filter domain models (FilterMatchResult, FilterValidationResult)
 - Email filter service with sender, subject, and regex matching
 - AND logic for multiple filters (all must match)
@@ -136,6 +145,7 @@ Key configuration areas:
 - Comprehensive unit tests (17 tests passing)
 
 ✅ Task 4: GPS Coordinate Extraction Service (COMPLETED)
+
 - GPS domain models with Effect Schema validation
 - Multiple regex patterns for Decimal Degrees format (with/without spaces, degree symbols)
 - HTML to plain text parsing
@@ -145,6 +155,7 @@ Key configuration areas:
 - Comprehensive unit tests (18 tests passing)
 
 ✅ Task 5: Map Generation Service (COMPLETED)
+
 - Mapy.cz integration (Czech mapping service, 250k free credits/month)
 - Map domain models (MapRequest, MapResponse, RouteGeometry)
 - Routing API client with route geometry extraction

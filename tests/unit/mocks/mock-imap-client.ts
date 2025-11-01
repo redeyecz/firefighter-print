@@ -32,8 +32,11 @@ export const createMockEmailClient = (
     emails?: Email[];
   } = {}
 ): EmailClientService => {
-  const { shouldFailConnection = false, shouldFailFetch = false, emails = mockEmailStore } =
-    options;
+  const {
+    shouldFailConnection = false,
+    shouldFailFetch = false,
+    emails = mockEmailStore,
+  } = options;
 
   let connected = false;
 

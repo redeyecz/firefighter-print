@@ -17,5 +17,3 @@ Firefighter Alarm - [Add project description here]
 ## Conventions
 
 Sacrifice grammer for specs in favor of readability, for PRD breakdown use ATDD conventions
-
-

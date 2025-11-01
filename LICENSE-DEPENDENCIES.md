@@ -11,46 +11,52 @@ All dependencies are verified to be **free, open source, and suitable for public
 ## Core Dependencies
 
 ### Runtime & Framework
-| Package | License | Status | Notes |
-|---------|---------|--------|-------|
-| **Bun** | MIT | ✅ Free | Modern JavaScript runtime |
-| **Next.js** | MIT | ✅ Free | React framework by Vercel |
-| **React** | MIT | ✅ Free | UI library by Meta (formerly BSD+Patents) |
-| **TypeScript** | Apache-2.0 | ✅ Free | Type-safe JavaScript |
+
+| Package        | License    | Status  | Notes                                     |
+| -------------- | ---------- | ------- | ----------------------------------------- |
+| **Bun**        | MIT        | ✅ Free | Modern JavaScript runtime                 |
+| **Next.js**    | MIT        | ✅ Free | React framework by Vercel                 |
+| **React**      | MIT        | ✅ Free | UI library by Meta (formerly BSD+Patents) |
+| **TypeScript** | Apache-2.0 | ✅ Free | Type-safe JavaScript                      |
 
 ### Effect System
-| Package | License | Status | Notes |
-|---------|---------|--------|-------|
-| **effect** | MIT | ✅ Free | Functional effect system |
-| **@effect/schema** | MIT | ✅ Free | Schema validation |
-| **@effect/platform** | MIT | ✅ Free | Platform abstractions |
-| **@effect/platform-node** | MIT | ✅ Free | Node.js platform support |
-| **@effect/sql** | MIT | ✅ Free | SQL integration |
-| **@effect/sql-sqlite-bun** | MIT | ✅ Free | SQLite integration for Bun |
+
+| Package                    | License | Status  | Notes                      |
+| -------------------------- | ------- | ------- | -------------------------- |
+| **effect**                 | MIT     | ✅ Free | Functional effect system   |
+| **@effect/schema**         | MIT     | ✅ Free | Schema validation          |
+| **@effect/platform**       | MIT     | ✅ Free | Platform abstractions      |
+| **@effect/platform-node**  | MIT     | ✅ Free | Node.js platform support   |
+| **@effect/sql**            | MIT     | ✅ Free | SQL integration            |
+| **@effect/sql-sqlite-bun** | MIT     | ✅ Free | SQLite integration for Bun |
 
 ### Database
-| Package | License | Status | Notes |
-|---------|---------|--------|-------|
+
+| Package    | License       | Status  | Notes                      |
+| ---------- | ------------- | ------- | -------------------------- |
 | **SQLite** | Public Domain | ✅ Free | No license required at all |
 
 ### Email (Proposed)
-| Package | License | Status | Notes |
-|---------|---------|--------|-------|
-| **ImapFlow** | MIT | ✅ Free | Modern IMAP client, actively maintained |
+
+| Package      | License | Status  | Notes                                   |
+| ------------ | ------- | ------- | --------------------------------------- |
+| **ImapFlow** | MIT     | ✅ Free | Modern IMAP client, actively maintained |
 
 ### Development Tools
-| Package | License | Status | Notes |
-|---------|---------|--------|-------|
-| **Vitest** | MIT | ✅ Free | Testing framework |
-| **ESLint** | MIT | ✅ Free | Code linting |
-| **Prettier** | MIT | ✅ Free | Code formatting |
-| **Husky** | MIT | ✅ Free | Git hooks |
+
+| Package      | License | Status  | Notes             |
+| ------------ | ------- | ------- | ----------------- |
+| **Vitest**   | MIT     | ✅ Free | Testing framework |
+| **ESLint**   | MIT     | ✅ Free | Code linting      |
+| **Prettier** | MIT     | ✅ Free | Code formatting   |
+| **Husky**    | MIT     | ✅ Free | Git hooks         |
 
 ---
 
 ## License Types Explained
 
 ### MIT License
+
 - ✅ **Permissive**: Very few restrictions
 - ✅ **Commercial Use**: Allowed without restrictions
 - ✅ **Modification**: Can modify and redistribute
@@ -59,6 +65,7 @@ All dependencies are verified to be **free, open source, and suitable for public
 - ✅ **Public Sector**: Perfect for government/fire department use
 
 ### Apache 2.0 License
+
 - ✅ **Permissive**: Similar to MIT but with patent grant
 - ✅ **Commercial Use**: Allowed without restrictions
 - ✅ **Patent Grant**: Explicit patent protection
@@ -66,6 +73,7 @@ All dependencies are verified to be **free, open source, and suitable for public
 - ✅ **Public Sector**: Excellent for government use
 
 ### Public Domain (SQLite)
+
 - ✅ **No License Required**: Completely free
 - ✅ **No Restrictions**: Use for any purpose
 - ✅ **No Attribution Required**: Optional
@@ -97,5 +105,5 @@ The project uses industry-standard open source licenses that are widely adopted 
 
 ---
 
-*Last Updated: 2025-01-11*
-*Verified for: Firefighter Dispatch System v1.0*
+_Last Updated: 2025-01-11_
+_Verified for: Firefighter Dispatch System v1.0_

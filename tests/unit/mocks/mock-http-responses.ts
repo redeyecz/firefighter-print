@@ -56,7 +56,7 @@ export const mockMapyCzRoutingShortRoute = {
         [17.254, 49.597],
         [17.255, 49.598],
         [17.256, 49.599],
-        [17.257432, 49.599810], // End
+        [17.257432, 49.59981], // End
       ],
     },
     properties: {},
@@ -144,7 +144,7 @@ export const testCoordinates = {
     longitude: 17.250932,
   },
   emergencyLocationOlomouc: {
-    latitude: 49.599810,
+    latitude: 49.59981,
     longitude: 17.257432,
   },
 };

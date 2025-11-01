@@ -5,10 +5,7 @@
 import { describe, it, expect } from "vitest";
 import { Effect } from "effect";
 import { GPSExtraction, GPSExtractionLive } from "@/backend/services/gps-extraction";
-import {
-  mockDispatchEmailNoGPS,
-  mockDispatchEmailMultipleGPS,
-} from "./mocks/email-fixtures";
+import { mockDispatchEmailNoGPS, mockDispatchEmailMultipleGPS } from "./mocks/email-fixtures";
 import type { Email } from "@/backend/domain/email";
 
 describe("GPSExtraction", () => {
