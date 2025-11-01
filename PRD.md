@@ -12,7 +12,7 @@ The vision is to create a "zero-touch" system that accelerates the dispatch-to-e
 *   **Ease of Use:** Create a system that requires no technical expertise for daily operation and features a simple administrative interface.
 
 **3. User Personas**
-*   **Firefighter/First Responder:** The primary user. They are not tech-savvy and require the printed output to be highly legible under stressful conditions, featuring large fonts for critical data and a high-contrast map.
+*   **Firefighter/First Responder:** The primary user. They are not tech-savvy and require the printed output to be highly legible under stressful conditions, featuring original input and large fonts for appended critical data or a map if no errors occur.
 *   **Dispatch Administrator:** A user with basic computer skills responsible for system oversight. Their primary goal is to ensure every dispatch is processed correctly. They need to quickly identify and resolve failures via a simple admin panel.
 
 **4. Features**
