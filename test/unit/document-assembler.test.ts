@@ -57,7 +57,7 @@ const testMapResponse = new MapResponse({
 });
 
 describe("DocumentAssembler - Happy Path", () => {
-  it.effect("should assemble document with map when GPS and map succeed", () =>
+  it.scoped("should assemble document with map when GPS and map succeed", () =>
     Effect.gen(function* () {
       const assembler = yield* DocumentAssembler;
       const result = yield* assembler.assemble(
@@ -87,7 +87,7 @@ describe("DocumentAssembler - Happy Path", () => {
     }).pipe(Effect.provide(Layer.merge(DocumentAssemblerLive, MockConfigService)))
   );
 
-  it.effect("should include warnings when GPS has warnings", () =>
+  it.scoped("should include warnings when GPS has warnings", () =>
     Effect.gen(function* () {
       const assembler = yield* DocumentAssembler;
       const result = yield* assembler.assemble(
@@ -106,7 +106,7 @@ describe("DocumentAssembler - Happy Path", () => {
     }).pipe(Effect.provide(Layer.merge(DocumentAssemblerLive, MockConfigService)))
   );
 
-  it.effect("should use two-page layout when configured", () =>
+  it.scoped("should use two-page layout when configured", () =>
     Effect.gen(function* () {
       // We need to mock config with two-page layout
       // For now, check that layout property is set
@@ -124,7 +124,7 @@ describe("DocumentAssembler - Happy Path", () => {
 });
 
 describe("DocumentAssembler - GPS Failure", () => {
-  it.effect("should show error when GPS extraction fails", () =>
+  it.scoped("should show error when GPS extraction fails", () =>
     Effect.gen(function* () {
       const gpsError = new GPSError({
         message: "No GPS coordinates found in email body",
@@ -155,7 +155,7 @@ describe("DocumentAssembler - GPS Failure", () => {
 });
 
 describe("DocumentAssembler - Map Failure", () => {
-  it.effect("should show error when map generation fails", () =>
+  it.scoped("should show error when map generation fails", () =>
     Effect.gen(function* () {
       const mapError = new MapError({
         message: "Mapping service is unavailable",
@@ -185,7 +185,7 @@ describe("DocumentAssembler - Map Failure", () => {
     }).pipe(Effect.provide(Layer.merge(DocumentAssemblerLive, MockConfigService)))
   );
 
-  it.effect("should show helpful message in map error", () =>
+  it.scoped("should show helpful message in map error", () =>
     Effect.gen(function* () {
       const mapError = new MapError({
         message: "Invalid API key",
@@ -205,7 +205,7 @@ describe("DocumentAssembler - Map Failure", () => {
 });
 
 describe("DocumentAssembler - HTML Preservation", () => {
-  it.effect("should preserve original email HTML exactly", () =>
+  it.scoped("should preserve original email HTML exactly", () =>
     Effect.gen(function* () {
       const complexHtml = `
       <html>
@@ -233,7 +233,7 @@ describe("DocumentAssembler - HTML Preservation", () => {
 });
 
 describe("DocumentAssembler - Visual Separation", () => {
-  it.effect("should include visual separator between email and appended content", () =>
+  it.scoped("should include visual separator between email and appended content", () =>
     Effect.gen(function* () {
       const assembler = yield* DocumentAssembler;
       const result = yield* assembler.assemble(
@@ -248,7 +248,7 @@ describe("DocumentAssembler - Visual Separation", () => {
     }).pipe(Effect.provide(Layer.merge(DocumentAssemblerLive, MockConfigService)))
   );
 
-  it.effect("should include page break for two-page layout", () =>
+  it.scoped("should include page break for two-page layout", () =>
     Effect.gen(function* () {
       // This would require a mock config with two-page layout
       // For now, verify the field exists
@@ -266,7 +266,7 @@ describe("DocumentAssembler - Visual Separation", () => {
 });
 
 describe("DocumentAssembler - Route Information Display", () => {
-  it.effect("should display distance and duration when available", () =>
+  it.scoped("should display distance and duration when available", () =>
     Effect.gen(function* () {
       const assembler = yield* DocumentAssembler;
       const result = yield* assembler.assemble(
@@ -282,7 +282,7 @@ describe("DocumentAssembler - Route Information Display", () => {
     }).pipe(Effect.provide(Layer.merge(DocumentAssemblerLive, MockConfigService)))
   );
 
-  it.effect("should display GPS coordinates in large, visible text", () =>
+  it.scoped("should display GPS coordinates in large, visible text", () =>
     Effect.gen(function* () {
       const assembler = yield* DocumentAssembler;
       const result = yield* assembler.assemble(

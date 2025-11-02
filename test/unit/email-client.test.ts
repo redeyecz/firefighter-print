@@ -14,7 +14,7 @@ import { mockDispatchEmailWithGPS } from "./mocks/email-fixtures";
 
 describe("EmailClient", () => {
   describe("Connection Management", () => {
-    it.effect("should connect successfully", () =>
+    it.scoped("should connect successfully", () =>
       Effect.gen(function* () {
         const client = yield* EmailClient;
         yield* client.connect();
@@ -23,7 +23,7 @@ describe("EmailClient", () => {
       }).pipe(Effect.provide(Layer.succeed(EmailClient, createMockEmailClient())))
     );
 
-    it.effect("should disconnect successfully", () =>
+    it.scoped("should disconnect successfully", () =>
       Effect.gen(function* () {
         const client = yield* EmailClient;
         yield* client.connect();
@@ -33,7 +33,7 @@ describe("EmailClient", () => {
       }).pipe(Effect.provide(Layer.succeed(EmailClient, createMockEmailClient())))
     );
 
-    it.effect("should fail to connect with invalid credentials", () =>
+    it.scoped("should fail to connect with invalid credentials", () =>
       Effect.gen(function* () {
         const client = yield* EmailClient;
         const error = yield* Effect.flip(client.connect());
@@ -43,7 +43,7 @@ describe("EmailClient", () => {
   });
 
   describe("Email Fetching", () => {
-    it.effect("should fetch new emails", () =>
+    it.scoped("should fetch new emails", () =>
       Effect.gen(function* () {
         const client = yield* EmailClient;
         yield* client.connect();
@@ -53,7 +53,7 @@ describe("EmailClient", () => {
       }).pipe(Effect.provide(Layer.succeed(EmailClient, createMockEmailClient())))
     );
 
-    it.effect("should fetch emails since specific UID", () =>
+    it.scoped("should fetch emails since specific UID", () =>
       Effect.gen(function* () {
         const client = yield* EmailClient;
         yield* client.connect();
@@ -63,7 +63,7 @@ describe("EmailClient", () => {
       }).pipe(Effect.provide(Layer.succeed(EmailClient, createMockEmailClient())))
     );
 
-    it.effect("should handle fetch errors", () =>
+    it.scoped("should handle fetch errors", () =>
       Effect.gen(function* () {
         const client = yield* EmailClient;
         yield* client.connect();
@@ -74,7 +74,7 @@ describe("EmailClient", () => {
   });
 
   describe("Email Parsing", () => {
-    it.effect("should parse email with GPS coordinates", () =>
+    it.scoped("should parse email with GPS coordinates", () =>
       Effect.gen(function* () {
         const client = yield* EmailClient;
         yield* client.connect();
@@ -99,7 +99,7 @@ describe("EmailClient", () => {
       )
     );
 
-    it.effect("should parse email metadata correctly", () =>
+    it.scoped("should parse email metadata correctly", () =>
       Effect.gen(function* () {
         const client = yield* EmailClient;
         yield* client.connect();
@@ -128,7 +128,7 @@ describe("EmailClient", () => {
   });
 
   describe("Health Check", () => {
-    it.effect("should return connected health status", () =>
+    it.scoped("should return connected health status", () =>
       Effect.gen(function* () {
         const client = yield* EmailClient;
         yield* client.connect();
@@ -138,7 +138,7 @@ describe("EmailClient", () => {
       }).pipe(Effect.provide(Layer.succeed(EmailClient, createMockEmailClient())))
     );
 
-    it.effect("should return disconnected health status", () =>
+    it.scoped("should return disconnected health status", () =>
       Effect.gen(function* () {
         const client = yield* EmailClient;
         const health = yield* client.getHealth();

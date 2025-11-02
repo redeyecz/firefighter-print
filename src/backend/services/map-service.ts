@@ -153,7 +153,7 @@ const makeMapService = (): IMapService => {
       const mapConfig = appConfig.map;
 
       // Build routing API URL
-      const routingUrl = new URL("https://api.mapy.com/v1/routing");
+      const routingUrl = new URL("https://api.mapy.com/v1/routing/route");
       routingUrl.searchParams.set("apikey", mapConfig.apiKey);
       routingUrl.searchParams.set("start", `${startPoint.longitude},${startPoint.latitude}`);
       routingUrl.searchParams.set("end", `${destination.longitude},${destination.latitude}`);
@@ -252,7 +252,7 @@ const makeMapService = (): IMapService => {
             destination,
             geometry.coordinates
           );
-          staticMapUrl.searchParams.set("paths", pathParam);
+          staticMapUrl.searchParams.set("shapes", pathParam);
         } catch {
           // If parsing fails, just show markers without path
         }

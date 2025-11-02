@@ -93,7 +93,7 @@ const createTimeoutHttpClient = () => {
 
 describe("MapService - Routing API", () => {
   describe("getRoute - Success Cases", () => {
-    it.effect("should successfully fetch route between two points", () => {
+    it.scoped("should successfully fetch route between two points", () => {
       const mockHttpClient = createMockHttpClient(mockMapyCzRoutingSuccess);
 
       return Effect.gen(function* () {
@@ -115,7 +115,7 @@ describe("MapService - Routing API", () => {
       }).pipe(Effect.provide(Layer.mergeAll(MapServiceLayer, MockConfigService, mockHttpClient)));
     });
 
-    it.effect("should handle short routes correctly", () => {
+    it.scoped("should handle short routes correctly", () => {
       const mockHttpClient = createMockHttpClient(mockMapyCzRoutingShortRoute);
 
       return Effect.gen(function* () {
@@ -135,7 +135,7 @@ describe("MapService - Routing API", () => {
   });
 
   describe("getRoute - Error Cases", () => {
-    it.effect("should return error when API returns 404 (route not found)", () => {
+    it.scoped("should return error when API returns 404 (route not found)", () => {
       const mockHttpClient = createMockHttpClient(mockMapyCzRouting404Error, 404);
 
       return Effect.gen(function* () {
@@ -151,7 +151,7 @@ describe("MapService - Routing API", () => {
       );
     });
 
-    it.effect("should return error when API returns 401 (invalid API key)", () => {
+    it.scoped("should return error when API returns 401 (invalid API key)", () => {
       const mockHttpClient = createMockHttpClient(mockMapyCzRouting401Error, 401);
 
       return Effect.gen(function* () {
@@ -167,7 +167,7 @@ describe("MapService - Routing API", () => {
       );
     });
 
-    it.effect("should return error when API returns 500 (service unavailable)", () => {
+    it.scoped("should return error when API returns 500 (service unavailable)", () => {
       const mockHttpClient = createMockHttpClient(mockMapyCzRouting503Error, 500);
 
       return Effect.gen(function* () {
@@ -190,7 +190,7 @@ describe("MapService - Routing API", () => {
       );
     });
 
-    it.effect.skip("should timeout after configured duration", () => {
+    it.scoped.skip("should timeout after configured duration", () => {
       // Skipping this test as TestClock interaction with Fiber.join creates timing issues in vitest
       // The timeout functionality is still covered by integration tests
       const mockHttpClient = createTimeoutHttpClient();
@@ -211,7 +211,7 @@ describe("MapService - Routing API", () => {
       );
     });
 
-    it.effect("should fail when response has no geometry", () => {
+    it.scoped("should fail when response has no geometry", () => {
       const invalidResponse = {
         length: 5000,
         duration: 300,
@@ -241,7 +241,7 @@ describe("MapService - Routing API", () => {
   });
 
   describe("getRoute - Retry Logic", () => {
-    it.effect("should NOT retry on auth errors (401)", () => {
+    it.scoped("should NOT retry on auth errors (401)", () => {
       let callCount = 0;
       const mockExecute = (request: HttpClientRequest.HttpClientRequest) => {
         callCount++;
@@ -278,7 +278,7 @@ describe("MapService - Routing API", () => {
       );
     });
 
-    it.effect("should NOT retry on 404 errors (route not found)", () => {
+    it.scoped("should NOT retry on 404 errors (route not found)", () => {
       let callCount = 0;
       const mockExecute = (request: HttpClientRequest.HttpClientRequest) => {
         callCount++;
@@ -315,7 +315,7 @@ describe("MapService - Routing API", () => {
       );
     });
 
-    it.effect("should retry on network errors with exponential backoff", () => {
+    it.scoped("should retry on network errors with exponential backoff", () => {
       let callCount = 0;
       const mockExecute = (request: HttpClientRequest.HttpClientRequest) => {
         callCount++;
@@ -368,7 +368,7 @@ describe("MapService - Routing API", () => {
 
 describe("MapService - Static Map URL Generation", () => {
   describe("generateStaticMapUrl", () => {
-    it.effect("should generate URL with correct base parameters", () =>
+    it.scoped("should generate URL with correct base parameters", () =>
       Effect.gen(function* () {
         const mapService = yield* MapService;
 
@@ -385,7 +385,7 @@ describe("MapService - Static Map URL Generation", () => {
       }).pipe(Effect.provide(Layer.merge(MapServiceLayer, MockConfigService)))
     );
 
-    it.effect("should include markers for start and destination", () =>
+    it.scoped("should include markers for start and destination", () =>
       Effect.gen(function* () {
         const mapService = yield* MapService;
 
@@ -410,7 +410,7 @@ describe("MapService - Static Map URL Generation", () => {
       }).pipe(Effect.provide(Layer.merge(MapServiceLayer, MockConfigService)))
     );
 
-    it.effect("should include route path when provided", () => {
+    it.scoped("should include route path when provided", () => {
       const routeGeometry = mockMapyCzRoutingSuccess.geometry.geometry;
       const routePath = JSON.stringify(routeGeometry);
 
@@ -423,15 +423,15 @@ describe("MapService - Static Map URL Generation", () => {
           routePath
         );
 
-        // Should contain paths parameter (URL encoded)
-        expect(url).toContain("paths=");
+        // Should contain shapes parameter (URL encoded)
+        expect(url).toContain("shapes=");
         expect(url).toMatch(/color.*blue/); // URL encoded
         expect(url).toMatch(/width.*3/);
         expect(url).toMatch(/path/);
       }).pipe(Effect.provide(Layer.merge(MapServiceLayer, MockConfigService)));
     });
 
-    it.effect("should work without route path (markers only)", () =>
+    it.scoped("should work without route path (markers only)", () =>
       Effect.gen(function* () {
         const mapService = yield* MapService;
 
@@ -447,7 +447,7 @@ describe("MapService - Static Map URL Generation", () => {
       }).pipe(Effect.provide(Layer.merge(MapServiceLayer, MockConfigService)))
     );
 
-    it.effect("should handle invalid route path gracefully", () => {
+    it.scoped("should handle invalid route path gracefully", () => {
       const invalidRoutePath = "not valid JSON";
 
       return Effect.gen(function* () {
@@ -468,7 +468,7 @@ describe("MapService - Static Map URL Generation", () => {
 });
 
 describe("MapService - Complete Flow", () => {
-  it.effect("should generate complete route map with imageUrl", () => {
+  it.scoped("should generate complete route map with imageUrl", () => {
     const mockHttpClient = createMockHttpClient(mockMapyCzRoutingSuccess);
 
     return Effect.gen(function* () {
@@ -482,7 +482,7 @@ describe("MapService - Complete Flow", () => {
       // Check MapResponse structure
       expect(result.imageUrl).toContain("https://api.mapy.com/v1/static/map");
       expect(result.imageUrl).toContain("apikey=");
-      expect(result.imageUrl).toContain("paths="); // Should include route
+      expect(result.imageUrl).toContain("shapes="); // Should include route
       expect(result.format).toBe("png");
       expect(result.width).toBe(testAppConfig.map.width);
       expect(result.height).toBe(testAppConfig.map.height);
@@ -494,7 +494,7 @@ describe("MapService - Complete Flow", () => {
     }).pipe(Effect.provide(Layer.mergeAll(MapServiceLayer, MockConfigService, mockHttpClient)));
   });
 
-  it.effect("should propagate routing errors to generateRouteMap", () => {
+  it.scoped("should propagate routing errors to generateRouteMap", () => {
     const mockHttpClient = createMockHttpClient(mockMapyCzRouting401Error, 401);
 
     return Effect.gen(function* () {

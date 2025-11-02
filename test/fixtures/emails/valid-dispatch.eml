@@ -1,0 +1,24 @@
+From: dispatch@emergency.com
+To: station@firestation.com
+Subject: DISPATCH - Structure Fire
+Date: Mon, 1 Jan 2024 12:00:00 +0000
+Message-ID: <test-valid-dispatch@emergency.com>
+Content-Type: text/plain; charset=UTF-8
+
+EMERGENCY DISPATCH
+
+Type: Structure Fire
+Priority: High
+
+Location: 123 Main Street, Prague
+GPS Coordinates: 50.0755, 14.4378
+
+Description:
+- Fire reported in residential building
+- Multiple occupants
+- Smoke visible from street
+
+Units Required: 2 engines, 1 ladder
+Contact: John Doe - 555-0123
+
+Dispatch Time: 12:00:00

@@ -1,0 +1,25 @@
+From: dispatch@emergency.com
+To: station@firestation.com
+Subject: DISPATCH - Medical Emergency
+Date: Mon, 1 Jan 2024 12:30:00 +0000
+Message-ID: <test-no-gps@emergency.com>
+Content-Type: text/plain; charset=UTF-8
+
+EMERGENCY DISPATCH
+
+Type: Medical Emergency
+Priority: Critical
+
+Location: Unknown - GPS coordinates not available
+Address: Somewhere near Wenceslas Square, Prague
+
+Description:
+- Medical emergency reported
+- Caller unable to provide exact location
+- Using landmarks only
+
+Contact: Jane Smith - 555-0456
+
+Dispatch Time: 12:30:00
+
+Note: GPS coordinates missing - manual navigation required

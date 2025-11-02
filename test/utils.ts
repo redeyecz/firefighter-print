@@ -37,7 +37,7 @@ import { Context, Layer } from "effect";
  * )
  * ```
  */
-export const makeTestLayer = <I, S extends Record<string, unknown>>(tag: Context.Tag<I, S>) => {
+export const makeTestLayer = <I, S>(tag: Context.Tag<I, S>) => {
   return (implementation: Partial<S>): Layer.Layer<I> => {
     // Create a proxy that throws for unimplemented methods
     const proxy = new Proxy(implementation, {

@@ -12,7 +12,7 @@ describe("EmailFilter", () => {
   const layer = EmailFilterLive;
 
   describe("Sender Email Matching", () => {
-    it.effect("should match sender email (exact match, case insensitive)", () =>
+    it.scoped("should match sender email (exact match, case insensitive)", () =>
       Effect.gen(function* () {
         const filter = yield* EmailFilter;
         const result = yield* filter.matchesSender(
@@ -23,7 +23,7 @@ describe("EmailFilter", () => {
       }).pipe(Effect.provide(layer))
     );
 
-    it.effect("should match sender email with different case", () =>
+    it.scoped("should match sender email with different case", () =>
       Effect.gen(function* () {
         const filter = yield* EmailFilter;
         const result = yield* filter.matchesSender(
@@ -34,7 +34,7 @@ describe("EmailFilter", () => {
       }).pipe(Effect.provide(layer))
     );
 
-    it.effect("should not match different sender", () =>
+    it.scoped("should not match different sender", () =>
       Effect.gen(function* () {
         const filter = yield* EmailFilter;
         const result = yield* filter.matchesSender(mockDispatchEmailWithGPS, "other@firedept.com");
@@ -44,7 +44,7 @@ describe("EmailFilter", () => {
   });
 
   describe("Subject Contains Matching", () => {
-    it.effect("should match subject contains (case insensitive)", () =>
+    it.scoped("should match subject contains (case insensitive)", () =>
       Effect.gen(function* () {
         const filter = yield* EmailFilter;
         const result = yield* filter.matchesSubject(mockDispatchEmailWithGPS, "DISPATCH");
@@ -52,7 +52,7 @@ describe("EmailFilter", () => {
       }).pipe(Effect.provide(layer))
     );
 
-    it.effect("should match subject with different case", () =>
+    it.scoped("should match subject with different case", () =>
       Effect.gen(function* () {
         const filter = yield* EmailFilter;
         const result = yield* filter.matchesSubject(mockDispatchEmailWithGPS, "structure fire");
@@ -60,7 +60,7 @@ describe("EmailFilter", () => {
       }).pipe(Effect.provide(layer))
     );
 
-    it.effect("should not match if subject doesn't contain string", () =>
+    it.scoped("should not match if subject doesn't contain string", () =>
       Effect.gen(function* () {
         const filter = yield* EmailFilter;
         const result = yield* filter.matchesSubject(mockDispatchEmailWithGPS, "Medical");
@@ -70,7 +70,7 @@ describe("EmailFilter", () => {
   });
 
   describe("Subject Regex Matching", () => {
-    it.effect("should match valid regex pattern", () =>
+    it.scoped("should match valid regex pattern", () =>
       Effect.gen(function* () {
         const filter = yield* EmailFilter;
         const result = yield* filter.matchesRegex(mockDispatchEmailWithGPS, "^DISPATCH:.*");
@@ -78,7 +78,7 @@ describe("EmailFilter", () => {
       }).pipe(Effect.provide(layer))
     );
 
-    it.effect("should not match non-matching regex", () =>
+    it.scoped("should not match non-matching regex", () =>
       Effect.gen(function* () {
         const filter = yield* EmailFilter;
         const result = yield* filter.matchesRegex(mockDispatchEmailWithGPS, "^MEDICAL:.*");
@@ -86,7 +86,7 @@ describe("EmailFilter", () => {
       }).pipe(Effect.provide(layer))
     );
 
-    it.effect("should fail with invalid regex pattern", () =>
+    it.scoped("should fail with invalid regex pattern", () =>
       Effect.gen(function* () {
         const filter = yield* EmailFilter;
         const error = yield* Effect.flip(
@@ -98,7 +98,7 @@ describe("EmailFilter", () => {
   });
 
   describe("Filter Application with AND Logic", () => {
-    it.effect("should match when only sender filter is configured and matches", () =>
+    it.scoped("should match when only sender filter is configured and matches", () =>
       Effect.gen(function* () {
         const filterConfig: FilterConfig = {
           senderEmail: "dispatch@firedept.com",
@@ -111,7 +111,7 @@ describe("EmailFilter", () => {
       }).pipe(Effect.provide(layer))
     );
 
-    it.effect("should match when only subject filter is configured and matches", () =>
+    it.scoped("should match when only subject filter is configured and matches", () =>
       Effect.gen(function* () {
         const filterConfig: FilterConfig = {
           subjectContains: "DISPATCH",
@@ -124,7 +124,7 @@ describe("EmailFilter", () => {
       }).pipe(Effect.provide(layer))
     );
 
-    it.effect("should match when both sender and subject match (AND logic)", () =>
+    it.scoped("should match when both sender and subject match (AND logic)", () =>
       Effect.gen(function* () {
         const filterConfig: FilterConfig = {
           senderEmail: "dispatch@firedept.com",
@@ -139,7 +139,7 @@ describe("EmailFilter", () => {
       }).pipe(Effect.provide(layer))
     );
 
-    it.effect("should not match when sender matches but subject doesn't (AND logic)", () =>
+    it.scoped("should not match when sender matches but subject doesn't (AND logic)", () =>
       Effect.gen(function* () {
         const filterConfig: FilterConfig = {
           senderEmail: "dispatch@firedept.com",
@@ -154,7 +154,7 @@ describe("EmailFilter", () => {
       }).pipe(Effect.provide(layer))
     );
 
-    it.effect("should not match when subject matches but sender doesn't (AND logic)", () =>
+    it.scoped("should not match when subject matches but sender doesn't (AND logic)", () =>
       Effect.gen(function* () {
         const filterConfig: FilterConfig = {
           senderEmail: "other@firedept.com",
@@ -169,7 +169,7 @@ describe("EmailFilter", () => {
       }).pipe(Effect.provide(layer))
     );
 
-    it.effect("should match with regex filter", () =>
+    it.scoped("should match with regex filter", () =>
       Effect.gen(function* () {
         const filterConfig: FilterConfig = {
           subjectRegex: "^DISPATCH:.*Fire.*",
@@ -182,7 +182,7 @@ describe("EmailFilter", () => {
       }).pipe(Effect.provide(layer))
     );
 
-    it.effect("should accept all emails when no filters are configured", () =>
+    it.scoped("should accept all emails when no filters are configured", () =>
       Effect.gen(function* () {
         const filterConfig: FilterConfig = {};
 
@@ -195,7 +195,7 @@ describe("EmailFilter", () => {
   });
 
   describe("Mutual Exclusivity Validation", () => {
-    it.effect("should fail when both subjectContains and subjectRegex are configured", () =>
+    it.scoped("should fail when both subjectContains and subjectRegex are configured", () =>
       Effect.gen(function* () {
         const filterConfig: FilterConfig = {
           subjectContains: "DISPATCH",

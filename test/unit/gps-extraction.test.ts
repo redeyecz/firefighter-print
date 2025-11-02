@@ -20,7 +20,7 @@ describe("GPSExtraction", () => {
   };
 
   describe("Decimal Degrees Format", () => {
-    it.effect("should extract GPS coordinates in standard format (49.947014 N, 17.885027 E)", () =>
+    it.scoped("should extract GPS coordinates in standard format (49.947014 N, 17.885027 E)", () =>
       Effect.gen(function* () {
         // Use a fresh email to avoid multiple GPS from mock fixtures
         const email: Email = {
@@ -41,7 +41,7 @@ describe("GPSExtraction", () => {
       }).pipe(Effect.provide(layer))
     );
 
-    it.effect("should extract coordinates without spaces (49.947014N, 17.885027E)", () =>
+    it.scoped("should extract coordinates without spaces (49.947014N, 17.885027E)", () =>
       Effect.gen(function* () {
         const email: Email = {
           uid: 999,
@@ -60,7 +60,7 @@ describe("GPSExtraction", () => {
       }).pipe(Effect.provide(layer))
     );
 
-    it.effect("should extract coordinates with degree symbols (49.947014° N, 17.885027° E)", () =>
+    it.scoped("should extract coordinates with degree symbols (49.947014° N, 17.885027° E)", () =>
       Effect.gen(function* () {
         const email: Email = {
           uid: 999,
@@ -79,7 +79,7 @@ describe("GPSExtraction", () => {
       }).pipe(Effect.provide(layer))
     );
 
-    it.effect("should handle South and West directions (negative coordinates)", () =>
+    it.scoped("should handle South and West directions (negative coordinates)", () =>
       Effect.gen(function* () {
         const email: Email = {
           uid: 999,
@@ -98,7 +98,7 @@ describe("GPSExtraction", () => {
       }).pipe(Effect.provide(layer))
     );
 
-    it.effect("should handle case-insensitive directions (n, s, e, w)", () =>
+    it.scoped("should handle case-insensitive directions (n, s, e, w)", () =>
       Effect.gen(function* () {
         const email: Email = {
           uid: 999,
@@ -119,7 +119,7 @@ describe("GPSExtraction", () => {
   });
 
   describe("HTML Parsing", () => {
-    it.effect("should extract coordinates from HTML content", () =>
+    it.scoped("should extract coordinates from HTML content", () =>
       Effect.gen(function* () {
         const email: Email = {
           uid: 999,
@@ -139,7 +139,7 @@ describe("GPSExtraction", () => {
       }).pipe(Effect.provide(layer))
     );
 
-    it.effect("should handle HTML entities and tags", () =>
+    it.scoped("should handle HTML entities and tags", () =>
       Effect.gen(function* () {
         const email: Email = {
           uid: 999,
@@ -161,7 +161,7 @@ describe("GPSExtraction", () => {
   });
 
   describe("Multiple Coordinates", () => {
-    it.effect("should return first coordinate with warning when multiple found", () =>
+    it.scoped("should return first coordinate with warning when multiple found", () =>
       Effect.gen(function* () {
         const gps = yield* GPSExtraction;
         const result = yield* gps.extractGPS(mockDispatchEmailMultipleGPS);
@@ -173,7 +173,7 @@ describe("GPSExtraction", () => {
   });
 
   describe("No Coordinates Found", () => {
-    it.effect("should fail when no GPS coordinates are in email", () =>
+    it.scoped("should fail when no GPS coordinates are in email", () =>
       Effect.gen(function* () {
         const gps = yield* GPSExtraction;
         const error = yield* Effect.flip(gps.extractGPS(mockDispatchEmailNoGPS));
@@ -183,7 +183,7 @@ describe("GPSExtraction", () => {
   });
 
   describe("Coordinate Validation", () => {
-    it.effect("should reject latitude outside valid range (> 90)", () =>
+    it.scoped("should reject latitude outside valid range (> 90)", () =>
       Effect.gen(function* () {
         const email: Email = {
           uid: 999,
@@ -201,7 +201,7 @@ describe("GPSExtraction", () => {
       }).pipe(Effect.provide(layer))
     );
 
-    it.effect("should reject latitude outside valid range (< -90)", () =>
+    it.scoped("should reject latitude outside valid range (< -90)", () =>
       Effect.gen(function* () {
         const email: Email = {
           uid: 999,
@@ -219,7 +219,7 @@ describe("GPSExtraction", () => {
       }).pipe(Effect.provide(layer))
     );
 
-    it.effect("should reject longitude outside valid range (> 180)", () =>
+    it.scoped("should reject longitude outside valid range (> 180)", () =>
       Effect.gen(function* () {
         const email: Email = {
           uid: 999,
@@ -237,7 +237,7 @@ describe("GPSExtraction", () => {
       }).pipe(Effect.provide(layer))
     );
 
-    it.effect("should reject longitude outside valid range (< -180)", () =>
+    it.scoped("should reject longitude outside valid range (< -180)", () =>
       Effect.gen(function* () {
         const email: Email = {
           uid: 999,
@@ -255,7 +255,7 @@ describe("GPSExtraction", () => {
       }).pipe(Effect.provide(layer))
     );
 
-    it.effect("should accept coordinates at valid boundaries (90, 180)", () =>
+    it.scoped("should accept coordinates at valid boundaries (90, 180)", () =>
       Effect.gen(function* () {
         const email: Email = {
           uid: 999,
@@ -274,7 +274,7 @@ describe("GPSExtraction", () => {
       }).pipe(Effect.provide(layer))
     );
 
-    it.effect("should accept coordinates at valid boundaries (-90, -180)", () =>
+    it.scoped("should accept coordinates at valid boundaries (-90, -180)", () =>
       Effect.gen(function* () {
         const email: Email = {
           uid: 999,
@@ -295,7 +295,7 @@ describe("GPSExtraction", () => {
   });
 
   describe("Edge Cases", () => {
-    it.effect("should extract from subject if no text or html", () =>
+    it.scoped("should extract from subject if no text or html", () =>
       Effect.gen(function* () {
         const email: Email = {
           uid: 999,
@@ -315,7 +315,7 @@ describe("GPSExtraction", () => {
       }).pipe(Effect.provide(layer))
     );
 
-    it.effect("should handle coordinates with varying decimal precision", () =>
+    it.scoped("should handle coordinates with varying decimal precision", () =>
       Effect.gen(function* () {
         const email: Email = {
           uid: 999,
@@ -334,7 +334,7 @@ describe("GPSExtraction", () => {
       }).pipe(Effect.provide(layer))
     );
 
-    it.effect("should handle integer coordinates", () =>
+    it.scoped("should handle integer coordinates", () =>
       Effect.gen(function* () {
         const email: Email = {
           uid: 999,

@@ -1,0 +1,29 @@
+From: dispatch@emergency.com
+To: station@firestation.com
+Subject: DISPATCH - Multi-Location Incident
+Date: Mon, 1 Jan 2024 13:00:00 +0000
+Message-ID: <test-multiple-gps@emergency.com>
+Content-Type: text/plain; charset=UTF-8
+
+EMERGENCY DISPATCH
+
+Type: Traffic Accident - Multiple Vehicles
+Priority: High
+
+Multiple locations involved:
+
+Incident Start: 50.0755, 14.4378
+Debris Field: 50.0760, 14.4380
+Emergency Staging: 50.0750, 14.4375
+
+Description:
+- Multi-vehicle accident on highway
+- Multiple GPS coordinates for different areas
+- Respond to primary incident location (first coordinates)
+
+Units Required: 3 engines, 2 ambulances
+Contact: Emergency Services - 112
+
+Dispatch Time: 13:00:00
+
+PRIMARY RESPONSE: 50.0755, 14.4378
